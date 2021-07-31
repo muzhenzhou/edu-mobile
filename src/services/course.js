@@ -34,3 +34,21 @@ export const getCourseById = params => {
     params
   })
 }
+
+// 获取课程章节信息
+export const getSectionAndLesson = params => {
+  return request({
+    method: 'GET',
+    url: '/front/course/session/getSectionAndLesson',
+    params
+  })
+}
+
+// 根据fileId获取阿里云对应的视频播放信息
+export const getVideoInfo = params => {
+  return request({
+    method: 'GET',
+    url: '/front/course/media/videoPlayInfo',
+    params
+  })
+}

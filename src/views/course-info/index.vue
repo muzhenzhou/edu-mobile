@@ -1,6 +1,6 @@
 <template>
   <div class="course-info">
-    <van-cell-group>
+    <van-cell-group :style="styleOptions">
       <!-- 课程图片 -->
       <van-cell class="course-img">
         <img :src="course.courseImgUrl" alt="">
@@ -29,22 +29,43 @@
       <van-tab title="详情">
         <div v-html="course.courseDescription"></div>
       </van-tab>
-      <van-tab title="内容">内容 2</van-tab>
+      <van-tab title="内容">
+        <course-section
+          v-for="item in sections"
+          :key="item.id"
+          :section-data="item"
+        ></course-section>
+      </van-tab>
     </van-tabs>
+    <!-- 底部支付功能 -->
+    <van-tabbar v-if="!course.isBuy">
+      <div class="price">
+        <span v-text="course.discountsTag"></span>
+        <span class="discounts">￥{{ course.discounts }}</span>
+        <span>￥{{ course.price }}</span>
+      </div>
+      <van-button type="primary">立即购买</van-button>
+    </van-tabbar>
   </div>
 </template>
 
 <script>
-import { getCourseById } from '@/services/course.js'
+import { getCourseById, getSectionAndLesson } from '@/services/course.js'
+import CourseSection from './components/CourseSection.vue'
 
 export default {
   name: 'CourseInfo',
   components: {
+    CourseSection
   },
   data () {
     return {
       // 课程信息
-      course: {}
+      course: {},
+      // 章节信息
+      sections: {},
+      // 样式信息
+      styleOptions: {}
     }
   },
   props: {
@@ -55,6 +76,7 @@ export default {
   },
   created () {
     this.loadCourse()
+    this.loadSection()
   },
   methods: {
     async loadCourse () {
@@ -62,6 +84,15 @@ export default {
         courseId: this.courseId
       })
       this.course = data.content
+      if (data.content.isBuy) {
+        this.styleOptions.bottom = 0
+      }
+    },
+    async loadSection () {
+      const { data } = await getSectionAndLesson({
+        courseId: this.courseId
+      })
+      this.sections = data.content.courseSectionList
     }
   }
 }
@@ -89,7 +120,7 @@ export default {
   margin: 0;
 }
 
-.course-price .discounts {
+.discounts {
   color: #ff7452;
   font-size: 24px;
   font-weight: 700;
@@ -104,6 +135,32 @@ export default {
   font-size: 12px;
   font-weight: 700;
   color: #666;
+}
 
+// 添加底部导航后设置
+.van-cell-group {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  bottom: 50px;
+  overflow: auto;
+}
+
+.van-tabbar {
+  line-height: 50px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+span {
+  font-size: 14px;
+}
+
+.van-button {
+  width: 50%;
+  height: 80%;
 }
 </style>
