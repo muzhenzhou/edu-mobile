@@ -22,21 +22,22 @@
         </div>
       </van-cell>
       <!-- 课程详细内容 -->
-      <van-cell class="course-detail"></van-cell>
+      <van-cell class="course-detail">
+        <!-- 选项卡 -->
+        <van-tabs scrollspy sticky>
+          <van-tab title="详情">
+            <div v-html="course.courseDescription"></div>
+          </van-tab>
+          <van-tab title="内容">
+            <course-section
+              v-for="item in sections"
+              :key="item.id"
+              :section-data="item"
+            ></course-section>
+          </van-tab>
+        </van-tabs>
+      </van-cell>
     </van-cell-group>
-    <!-- 选项卡 -->
-    <van-tabs scrollspy sticky>
-      <van-tab title="详情">
-        <div v-html="course.courseDescription"></div>
-      </van-tab>
-      <van-tab title="内容">
-        <course-section
-          v-for="item in sections"
-          :key="item.id"
-          :section-data="item"
-        ></course-section>
-      </van-tab>
-    </van-tabs>
     <!-- 底部支付功能 -->
     <van-tabbar v-if="!course.isBuy">
       <div class="price">
@@ -44,7 +45,10 @@
         <span class="discounts">￥{{ course.discounts }}</span>
         <span>￥{{ course.price }}</span>
       </div>
-      <van-button type="primary">立即购买</van-button>
+      <van-button
+        type="primary"
+        @click="handlePay"
+      >立即购买</van-button>
     </van-tabbar>
   </div>
 </template>
@@ -79,6 +83,25 @@ export default {
     this.loadSection()
   },
   methods: {
+    handlePay () {
+      if (this.$store.state.user) {
+        // 如果已经登录，直接跳转支付页
+        this.$router.push({
+          name: 'pay',
+          params: {
+            courseId: this.courseId
+          }
+        })
+      } else {
+        // 如果未登录，则先跳转至登录页，完成登录后再跳转回当前页
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.$route.fullPath
+          }
+        })
+      }
+    },
     async loadCourse () {
       const { data } = await getCourseById({
         courseId: this.courseId
@@ -143,7 +166,7 @@ export default {
   width: 100%;
   top: 0;
   bottom: 50px;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .van-tabbar {

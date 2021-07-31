@@ -16,10 +16,6 @@ export default {
   name: 'CourseVideo',
   components: {
   },
-  data () {
-    return {
-    }
-  },
   props: {
     lessonId: {
       type: [String, Number],
@@ -35,20 +31,25 @@ export default {
         lessonId: this.lessonId
       })
       console.log(data)
+      // 初始化播放器
       const player = new window.Aliplayer({
+        // 视频容器ID
         id: 'video-container',
+        // 视频ID
         vid: data.content.fileId,
+        // 播放凭证
         playauth: data.content.playAuth,
         qualitySort: 'asc',
         format: 'mp4',
         mediaType: 'video',
         width: '100%',
-        height: '500px',
+        height: '100%',
         autoplay: true,
         isLive: false,
         rePlay: false,
         playsinline: true,
         preload: true,
+        setVolume: 0.5,
         controlBarVisibility: 'hover',
         useH5Prism: true
       }, function (player) {
@@ -62,12 +63,11 @@ export default {
 
 <style lang='scss' scoped>
 .course-video {
-  width: 100%;
   height: 210px;
 }
 
-#video-container {
-  width: 100%;
-  height: auto;
-}
+// #video-container {
+//   width: 100%;
+//   height: auto;
+// }
 </style>
