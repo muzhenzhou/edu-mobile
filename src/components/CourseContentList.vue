@@ -40,10 +40,13 @@
 </template>
 
 <script>
-
+import { PullRefresh, List, Cell, Toast } from 'vant'
 export default {
   name: 'CourseContentList',
   components: {
+    VanPullRefresh: PullRefresh,
+    VanList: List,
+    VanCell: Cell
   },
   props: {
     fetchData: {
@@ -80,7 +83,7 @@ export default {
       } else if (data.content && data.content.length !== 0) {
         this.list = data.content
       }
-      this.$toast.success('刷新成功')
+      Toast.success('刷新成功')
       this.isRefreshing = false
     },
     async onLoad () {
@@ -99,7 +102,7 @@ export default {
       // 加载状态结束
       this.loading = false
       // 数据全部加载完成
-      if (data.content.records && data.content.records.length < 10) {
+      if (data.data && data.data.records && data.data.records.length < 10) {
         this.finished = true
       } else if (data.content && data.content.length < 10) {
         this.finished = true

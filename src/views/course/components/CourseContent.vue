@@ -13,11 +13,14 @@
 
 <script>
 import { getAllAds, getQueryCourses } from '@/services/course.js'
+import { Swipe, SwipeItem } from 'vant'
 import CourseContentList from '@/components/CourseContentList.vue'
 
 export default {
   name: 'CourseContent',
   components: {
+    VanSwipe: Swipe,
+    VanSwipeItem: SwipeItem,
     CourseContentList
   },
   computed: {

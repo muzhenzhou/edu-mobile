@@ -10,15 +10,16 @@
 </template>
 
 <script>
+import { NavBar } from 'vant'
 import CourseContentList from '@/components/CourseContentList.vue'
 import LayoutFooter from '@/components/LayoutFooter.vue'
 import { getPurchaseCourse } from '@/services/course.js'
-// import request from '@/utils/request.js'
 export default {
   name: 'Learn',
   components: {
     LayoutFooter,
-    CourseContentList
+    CourseContentList,
+    VanNavBar: NavBar
   },
   methods: {
     fetchData () {
@@ -29,12 +30,6 @@ export default {
     return {
       courseList: []
     }
-  },
-  created () {
-    // request({
-    //   method: 'GET',
-    //   url: '/front/course/getPurchaseCourse'
-    // })
   }
 }
 </script>

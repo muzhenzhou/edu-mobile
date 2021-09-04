@@ -53,6 +53,7 @@
 
 <script>
 import { login } from '@/services/user.js'
+import { Form, NavBar, Field, Button, Toast } from 'vant'
 
 export default {
   name: 'Login',
@@ -66,18 +67,22 @@ export default {
     }
   },
   components: {
+    VanForm: Form,
+    VanNavBar: NavBar,
+    VanField: Field,
+    VanButton: Button
   },
   methods: {
     async onSubmit () {
       this.isLoading = true
       const { data } = await login(this.form)
       if (data.state === 1) {
-        this.$toast.success('登录成功')
+        Toast.success('登录成功')
         this.$store.commit('setUser', data.content)
         // 跳转
         this.$router.push(this.$route.query.redirect || '/')
       } else {
-        this.$toast.fail('登录失败')
+        Toast.fail('登录失败')
       }
       this.isLoading = false
     },

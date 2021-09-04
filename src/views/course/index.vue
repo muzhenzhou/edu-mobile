@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import LayoutFooter from '@/components/LayoutFooter.vue'
 import CourseHeader from './components/CourseHeader.vue'
 import CourseContent from './components/CourseContent.vue'
+import LayoutFooter from '@/components/LayoutFooter.vue'
 export default {
   name: 'Course',
   components: {
